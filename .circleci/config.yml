@@ -82,7 +82,7 @@ jobs:
       - restore_cache:
           keys: [frontend-test]
       - run:
-          name: frontend-test
+          name: frontend test
           command: |
             # Your code here
             cd frontend
@@ -91,7 +91,7 @@ jobs:
             exit 1
       - save_cache:
           paths: [frontend/node_modules]
-          key: frontend-test
+          key: frontend test
       
                 
   test-backend:
