@@ -134,8 +134,9 @@ jobs:
             cd frontend
             npm install
             # npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical
             npm audit --audit-level=critical
-            npm audit fix --audit-level=critical 
+            
          
       - save_cache:
           paths: [frontend/node_modules]
@@ -159,8 +160,9 @@ jobs:
             cd backend
             npm install
             # npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical
             npm audit --audit-level=critical
-            npm audit fix --audit-level=critical 
+            
       # Your job code here
       - save_cache:
           paths: [backend/node_modules]
@@ -178,7 +180,7 @@ jobs:
 #               --template-file .circleci/files/backend.yml \
 #               #--tags project=your-tag \
 #               # --stack-name "your back-end stack name with workflow id" \
-#               # --parameter-overrides ID="your workflow id"  
+#               #el=critical  --parameter-overrides ID="your workflow id"  
 #               exit 1
 #       - run:
 #           name: Ensure front-end infrastructure exist
