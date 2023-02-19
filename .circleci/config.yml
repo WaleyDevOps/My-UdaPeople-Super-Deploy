@@ -225,7 +225,7 @@ jobs:
             # --query 'Reservations[*].Instances[*].PublicIpAddress' \
             # --filter Name=tag:Name,Values=backend-${CRICLE_WORKFLOW_ID:0:7}\
             # --output text
-            # }
+            
             
 
             
