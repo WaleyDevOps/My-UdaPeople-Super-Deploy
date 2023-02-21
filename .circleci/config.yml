@@ -273,26 +273,26 @@ jobs:
 
       # Here's where you will add some code to rollback on failure   
 
-run-migrations:
-  docker:
-  - image: circleci/node:13.8.0
-  steps:
-    - checkout
-    - run:
-          name: Run migrations
-          command: | 
-              cd backend
-              npm install
-              npm run migrations > migrations_dump.txt
-    - run:
-        name: Send migration result to kvdb
-        command:  | 
-             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-             then
-               curl --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
-             fi
-   - destroy-environment
-   - revert-migrations
+  run-migrations:
+    docker:
+    - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+            name: Run migrations
+            command: | 
+                cd backend
+                npm install
+                npm run migrations > migrations_dump.txt
+      - run:
+          name: Send migration result to kvdb
+          command:  | 
+              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+              then
+                curl --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+              fi
+      - destroy-environment
+      - revert-migrations
    
 
  
