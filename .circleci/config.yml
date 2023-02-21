@@ -213,12 +213,7 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
               --tags project=udapeople
 
-            # aws cloudformation deploy \
-            #   --template-file .circleci/files/backend.yml \
-            #   --tags project=your-tag \
-            #   --stack-name "your back-end stack name with workflow id" \
-            #   --parameter-overrides ID="your workflow id"  
-              
+                         
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -245,11 +240,7 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} >> inventory.txt
             cat inventory.txt
-            # export BACKEND_IP-${aws ec2 describe-instances \
-            # --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            # --filter Name=tag:Name,Values=backend-${CRICLE_WORKFLOW_ID:0:7}\
-            # --output text
-            
+                        
             
 
             
@@ -286,45 +277,29 @@ jobs:
 
       # Here's where you will add some code to rollback on failure   
 
-# run-migrations:
-# docker:
-#  - image: circleci/node:13.8.0
-# steps:
-#    - checkout
-#    - run:
-#         name: Run migrations
-#         command: | 
-#             cd backend
-#             npm install
-#             npm run migrations > migrations_dump.txt
-#    - run:
-#         name: Send migration result to kvdb
-#         command:  | 
-#              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-#              then
-#                curl --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
-#              fi
-#    - destroy-environment
-#    - revert-migrations
+run-migrations:
+docker:
+ - image: circleci/node:13.8.0
+steps:
+   - checkout
+   - run:
+        name: Run migrations
+        command: | 
+            cd backend
+            npm install
+            npm run migrations > migrations_dump.txt
+   - run:
+        name: Send migration result to kvdb
+        command:  | 
+             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+             then
+               curl --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+             fi
+   - destroy-environment
+   - revert-migrations
    
 
-  # run-migrations:
-  #   docker:
-  #     # Docker image here that supports NodeJS
-  #   steps:
-  #     # Checkout code from git
-  #     - run:
-  #         name: Run migrations
-  #         command: |
-  #           # Your code here
-  #           exit 1
-  #     - run:
-  #         name: Send migration results to memstash
-  #         command: |
-  #           # Your code here
-  #           exit 1
-     # Here's where you will add some code to rollback on failure     
-
+ 
 
 #   deploy-frontend:
 #     docker:
@@ -444,8 +419,8 @@ workflows:
 
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
