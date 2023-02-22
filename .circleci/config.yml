@@ -335,7 +335,7 @@ jobs:
         - run:
             name: Get backend url
             command: |
-                  export BACKEND_IP-$(aws ec2 describe-instances \
+                  export BACKEND_IP=$(aws ec2 describe-instances \
                   --query 'Reservations[*].Instances[*].PublicIpAddress' \
                   --filter Name=tag:Name,Values=backend-${CRICLE_WORKFLOW_ID:0:7} \
                   --output text
@@ -378,7 +378,7 @@ jobs:
         - run: 
               name: Deploy backend
               command: |
-                  cd backend
+                    cd backend
                   
                     npm i
                     npm run build 
@@ -387,7 +387,7 @@ jobs:
                     cd .circleci/ansible
                     mkdir files
                     cd files
-                    tar -C ../ ../ ../backend -cvzf artifact.tar.gz
+                    tar -C ../../../backend -cvzf artifact.tar.gz .
                     cd ../
 
                     echo "Content of the inventory.txt is -----------"
