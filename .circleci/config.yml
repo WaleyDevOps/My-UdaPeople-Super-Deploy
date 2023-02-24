@@ -397,7 +397,7 @@ jobs:
         - revert-migrations
 
   
-  smoke-test-backend:
+  smoke-test:
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -416,13 +416,7 @@ jobs:
              API_URL="http://${BACKEND_IP}:3030"
              curl "${API_URL}/api/status"
 
-  smoke-test-frontend:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/
+  
       - run:
           name: Install dependencies
           command: |
