@@ -454,13 +454,6 @@ jobs:
       - run:
               name: Update Cloudfront distribution 
               command: |
-                  # aws cloudformation deploy \
-                  # --template-file .circleci/files/cloudfront.yml\
-                  # --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
-                  # --stack-name InitialStack
-
-
-                  
                   aws cloudformation deploy \
                     --template-file .circleci/files/cloudfront.yml \
                     --stack-name InitialStack \
@@ -471,59 +464,41 @@ jobs:
       - revert-migrations
  
 
-  # cleanup:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #       - checkout
-  #       -  install_awscli
-  #       - run:
-  #            name: Get Old stack workflow id
-  #            command:  |
-  #                 export STACKS=($(aws cloudformation list-stacks \
-  #                        --query "StackSummaries[*].StackName" \
-  #                        --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
-  #                   echo Stack names: "${STACK[@]}"
-  #                   export OldWorkflowID=$(curl --insecure https://kvdb.io/bucket_name/old_workflow_id)
-  #                   echo Old Workflow ID: $OldWorkflowID
-  #       - run:
-  #             name: Remove Old stacks and files
-  #             command:  |
-  #                   export OldWorkflowID=$(curl  --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/old_workflow_id)
-  #                   echo Old Workflow ID: $OldWorkflowID
+  cleanup:
+    docker:
+      - image: cimg/base:stable
+    steps:
+        - checkout
+        -  install_awscli
+        - run:
+             name: Get Old stack workflow id
+             command:  |
+                  export STACKS=($(aws cloudformation list-stacks \
+                         --query "StackSummaries[*].StackName" \
+                         --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+                    echo Stack names: "${STACK[@]}"
+                    export OldWorkflowID=$(curl --insecure https://kvdb.io/bucket_name/old_workflow_id)
+                    echo Old Workflow ID: $OldWorkflowID
+        - run:
+              name: Remove Old stacks and files
+              command:  |
+                    export OldWorkflowID=$(curl  --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/old_workflow_id)
+                    echo Old Workflow ID: $OldWorkflowID
 
-  #                           if [[ "${STACK[@]}" =~ "$OldWorkflowID" ]]
-  #                           then
-  #                                    aws s3 "s3://udapeople-$OldWorkflowID}" --recursive
-  #                                    aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkflowID}"
-  #                                    aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkflowID}"
+                            if [[ "${STACK[@]}" =~ "$OldWorkflowID" ]]
+                            then
+                                     aws s3 "s3://udapeople-$OldWorkflowID}" --recursive
+                                     aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkflowID}"
+                                     aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkflowID}"
 
-  #                           fi
+                            fi
 
 
                  
 
 
 
-# cleanup:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Get old stack workflow id
-#           command: |
-#             # your code here
-#             export OldWorkflowID="the id here"
-#             export STACKS=[] #put the list of stacks here
-#       - run:
-#           name: Remove old stacks and files
-#           command: |
-#             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-#             then
-#               # your code here
-#             fi
-            
+
 
 workflows:
   default:
@@ -557,5 +532,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
