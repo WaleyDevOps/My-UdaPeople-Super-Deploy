@@ -415,8 +415,6 @@ jobs:
              BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
              API_URL="http://${BACKEND_IP}:3030"
              curl "${API_URL}/api/status"
-
-  
       - run:
           name: Install dependencies
           command: |
