@@ -414,7 +414,7 @@ jobs:
           command: |
              BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
              API_URL="http://${BACKEND_IP}:3030"
-             if curl -s "${API_URL}/api/status"
+             if curl "${API_URL}/api/status" | grep "ok"
              then
                   return 0
               else
