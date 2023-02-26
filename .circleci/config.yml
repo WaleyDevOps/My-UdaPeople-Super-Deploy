@@ -463,7 +463,7 @@ jobs:
       - destroy-environment
       - revert-migrations
  
- 
+   # Cleanup Stack
   cleanup:
     docker:
       - image: amazon/aws-cli
