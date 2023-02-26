@@ -67,7 +67,7 @@ commands:
           # Add when this will run here now
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl --insecure "https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/migration_<<parameters.workflow_id>>")
+            SUCCESS=$(curl --insecure "https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/migration_<<parameters.workflow_id>>")
             if(( $SUCCESS==1 )); 
             then
              cd ~/project/backend
@@ -311,7 +311,7 @@ jobs:
           command:  | 
               if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
               then
-                curl --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+                curl --insecure https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
               fi
       - destroy-environment
       - revert-migrations
@@ -450,7 +450,7 @@ jobs:
               list-exports --query "Exports[?Name==\'WorkflowID\'].Value" \
               --no-paginate --output text)
                echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
-               curl https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/old_workflow_id -d  "${OLD_workflow_id}"
+               curl https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/old_workflow_id -d  "${OLD_WORKFLOW_ID}"
       - run:
               name: Update Cloudfront distribution 
               command: |
@@ -472,7 +472,7 @@ jobs:
       - run:
           name: Get old stack workflow id and Cleanup
           command: |           
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/RbTkSyUa7aVZkbXqr8rksx/old_workflow_id)
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/old_workflow_id)
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "$CIRCLE_WORKFLOW_ID"
