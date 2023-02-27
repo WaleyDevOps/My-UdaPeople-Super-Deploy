@@ -73,7 +73,7 @@ commands:
              cd ~/project/backend
              npm install
             #  Add revert code here. You can find this in the Getting Started section.
-             npm run migration:revert
+             npm run migrations:revert
             fi
               
             
