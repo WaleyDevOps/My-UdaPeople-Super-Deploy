@@ -466,9 +466,11 @@ jobs:
    # Cleanup Stack
   cleanup:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/base:stable
     steps:
       - checkout
+      -  install_awscli
+
       - run:
           name: Get old stack workflow id and Cleanup
           command: |           
