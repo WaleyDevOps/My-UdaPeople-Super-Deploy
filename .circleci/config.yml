@@ -40,8 +40,8 @@ commands:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
       # Add parameter here
-      workflow_ID:
-        default: ${CIRCLE_WORKFLOW_ID:0:7}
+      workflow_id:
+        default: "${CIRCLE_WORKFLOW_ID:0:7}"
         type: string
    
     steps:
@@ -51,15 +51,15 @@ commands:
           command: |
             # Your code here
             aws s3 rm "s3://udapeople-<< parameters.workflow_id >>" --recursive
-            aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_ID >>"
-            aws cloudformation delete-stack --stack-name "udapeople-frontend-<< parameters.workflow_ID >>"
+            aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_id >>"
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-<< parameters.workflow_id >>"
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
       # Add parameter here 
-      workflow_ID:
-        default: ${CIRCLE_WORKFLOW_ID:0:7}
+      workflow_id:
+        default: "${CIRCLE_WORKFLOW_ID:0:7}"
         type: string    
     steps:
       - run:
@@ -67,7 +67,7 @@ commands:
           # Add when this will run here now
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl --insecure "https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/migration_<< parameters.workflow_ID >>")
+            SUCCESS=$(curl --insecure "https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/migration_<< parameters.workflow_id >>")
             if (( $SUCCESS==1 )); 
             then
              cd ~/project/backend
