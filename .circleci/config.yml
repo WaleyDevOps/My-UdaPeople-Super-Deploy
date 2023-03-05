@@ -67,13 +67,13 @@ commands:
           # Add when this will run here now
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl --insecure "https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/migration_<< parameters.workflow_id >>")
-            if(( $SUCCESS==1 )); 
+            SUCCESS=$(curl --insecure "https://kvdb.io/GxSSJoVqCBXMWLqX1KkcJq/migration_<< parameters.workflow_ID >>")
+            if (( $SUCCESS==1 )); 
             then
              cd ~/project/backend
              npm install
             #  Add revert code here. You can find this in the Getting Started section.
-             npm migrations:revert
+             npm run migration:revert
             fi
               
             
