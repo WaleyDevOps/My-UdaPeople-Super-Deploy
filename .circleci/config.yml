@@ -41,7 +41,7 @@ commands:
     parameters:
       # Add parameter here
       workflow_id:
-        default: "${CIRCLE_WORKFLOW_ID:0:7}"
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
         type: string
    
     steps:
@@ -51,8 +51,8 @@ commands:
           command: |
             # Your code here
             aws s3 rm "s3://udapeople-<< parameters.workflow_id >>" --recursive
-            aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_id >>"
-            aws cloudformation delete-stack --stack-name "udapeople-frontend-<< parameters.workflow_id >>"
+            aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_ID >>"
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-<< parameters.workflow_ID >>"
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
